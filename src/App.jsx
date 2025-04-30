@@ -12,7 +12,8 @@ const App = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/">
-        <Route path="/registration" element={<Registration />} />
+        <Route index element={<Registration />} />
+
         <Route path="/login" element={<Login />} />
       </Route>
     )
