@@ -57,7 +57,7 @@ const Registration = () => {
           <div className="text-center mt- text-sm text-gray-400">
             Already have an account?
             <Link to="/login" className="text-blue-600 hover:underline">
-              Sign up
+              Login
             </Link>
           </div>
         </form>

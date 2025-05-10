@@ -1,24 +1,22 @@
 import React from 'react';
-import Registration from './Components/Registration';
-import {
-  createBrowserRouter,
-  createRoutesFromElements,
-  Route,
-  RouterProvider,
-} from 'react-router-dom';
-import Login from './Components/Login';
 
-const App = () => {
-  const router = createBrowserRouter(
-    createRoutesFromElements(
-      <Route path="/">
-        <Route index element={<Registration />} />
-        <Route path="/registration" element={<Registration />} />
-        <Route path="/login" element={<Login />} />
-      </Route>
-    )
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+
+import Register from './Page/Register';
+import Log from './Page/Log';
+import Chatting from './Page/Chatting';
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Log />} />
+        <Route path="/chat" element={<Chatting />} />
+        <Route path="/registration" element={<Register />} />
+        <Route path="*" element={<Log />} />
+      </Routes>
+    </BrowserRouter>
   );
-  return <RouterProvider router={router}></RouterProvider>;
-};
+}
 
 export default App;
