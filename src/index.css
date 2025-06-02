@@ -132,7 +132,7 @@
 /* From Uiverse.io by Smit-Prajapati */
 .outSide {
   /* background-color: #12b1d1; */
-  background-image: url(../public/image/svg.svg);
+  background-image: url(/image/svg.svg);
   background-size: cover;
   background-position: center;
 }

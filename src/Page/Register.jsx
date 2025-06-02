@@ -10,6 +10,7 @@ const Register = () => {
     email: '',
     password: '',
   });
+
   // console.log(import.meta.env.VITE_API_BASE_URL);
 
   const handelReg = async e => {

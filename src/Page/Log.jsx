@@ -1,18 +1,69 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { authServices } from '../services/api';
+import { toast, ToastContainer } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { loggedUser } from '../store/slices/authSlice';
 
 const Log = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [regData, setRegData] = useState({
+    email: '',
+    password: '',
+  });
+  const handelLog = async e => {
+    e.preventDefault();
+    try {
+      const res = await authServices.loginUser(regData);
+
+      toast.success(res.success);
+      dispatch(loggedUser(res.data));
+
+      setTimeout(() => {
+        navigate(`/chat`);
+      }, 1000);
+    } catch (error) {
+      toast.error(error.response.data.error);
+    }
+  };
   return (
     <section className="min-h-screen flex items-center justify-center outSide">
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        closeOnClick={false}
+        rtl={false}
+        theme="light"
+      />
       <div className="container ">
         <div className="text-xl text-white font-semibold text-center mb-4 bg-[#86cff4] py-3 px-8 rounded-b-4xl  ">
           <h1>ChatApp</h1>
         </div>
         <div className="heading">Login</div>
 
-        <form action="" className="form">
-          <input className="input" type="email" placeholder="E-mail" />
-          <input className="input" type="password" placeholder="Password" />
+        <form onSubmit={handelLog} className="form">
+          <input
+            onChange={e =>
+              setRegData(prev => ({ ...prev, email: e.target.value }))
+            }
+            placeholder="Enter your Email"
+            type="email"
+            id="email"
+            name="email"
+            className="input"
+          />
+          <input
+            onChange={e =>
+              setRegData(prev => ({ ...prev, password: e.target.value }))
+            }
+            placeholder="Enter your Password"
+            type="password"
+            id="password"
+            name="password"
+            className="input"
+          />
           <span className="forgot-password">
             <a href="#">Forgot Password ?</a>
           </span>

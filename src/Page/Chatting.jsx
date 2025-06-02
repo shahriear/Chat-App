@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { FiSearch } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import ConversationList from '../Components/ConversationList';
+import { useSelector } from 'react-redux';
 
 const currentUser = 'shuvo';
 
@@ -27,6 +28,7 @@ const users = [
 ];
 
 const Chat = () => {
+  const userData = useSelector(state => state.user);
   const [showEmailInput, setShowEmailInput] = useState(false);
   const [newEmail, setNewEmail] = useState('');
   const [selectedUser, setSelectedUser] = useState(null); // <-- New
@@ -38,7 +40,7 @@ const Chat = () => {
       setShowEmailInput(false);
     }
   };
-
+  // console.log(userData.avatar);
   return (
     <div className="flex h-screen bg-[#F5F3FF]">
       {/* Left Sidebar */}
@@ -46,9 +48,12 @@ const Chat = () => {
         <div>
           <div className="flex flex-col mb-10">
             <div className="flex justify-between">
-              <span className="text-xl text-gray-500 capitalize">
-                {currentUser}
-              </span>
+              <div>
+                <div>
+                  <img src={userData?.avatar} alt="" />
+                </div>
+                <h4 className="text-xl capitalize">{userData.fullName}</h4>
+              </div>
               <Link to="/log" className="text-blue-600">
                 logOut
               </Link>
