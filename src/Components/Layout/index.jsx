@@ -10,7 +10,7 @@ const Layout = () => {
 
   useEffect(() => {
     if (!user) {
-      return navigate();
+      return navigate('/login');
     }
   }, []);
   return (

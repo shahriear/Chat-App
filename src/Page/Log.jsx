@@ -18,7 +18,7 @@ const Log = () => {
       const res = await authServices.loginUser(regData);
 
       toast.success(res.success);
-      dispatch(loggedUser(res.data));
+      dispatch(loggedUser(res.user));
 
       setTimeout(() => {
         navigate(`/chat`);

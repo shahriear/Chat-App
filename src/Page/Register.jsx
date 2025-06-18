@@ -119,7 +119,7 @@ const Register = () => {
         <span className="agreement">
           <div className="text-center mt- text-sm text-gray-400">
             Already have an account?
-            <Link to={'/log'}> Login</Link>
+            <Link to={'/login'}> Login</Link>
           </div>
         </span>
       </div>

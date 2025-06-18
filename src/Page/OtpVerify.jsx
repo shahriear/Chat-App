@@ -21,7 +21,7 @@ const OtpVerify = () => {
       const res = await authServices.verifyOtp(params, otp.join(''));
       toast.success(res.success);
       setTimeout(() => {
-        navigate('/log');
+        navigate('/login');
       }, 2000);
     } catch (error) {
       toast.error(error.response.data.error);

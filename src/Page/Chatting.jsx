@@ -3,6 +3,7 @@ import { FiSearch } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import ConversationList from '../Components/ConversationList';
 import { useSelector } from 'react-redux';
+import Log from './Log';
 
 const currentUser = 'shuvo';
 
@@ -29,6 +30,8 @@ const users = [
 
 const Chat = () => {
   const userData = useSelector(state => state.user);
+  // console.log(userData);
+
   const [showEmailInput, setShowEmailInput] = useState(false);
   const [newEmail, setNewEmail] = useState('');
   const [selectedUser, setSelectedUser] = useState(null); // <-- New
@@ -52,9 +55,9 @@ const Chat = () => {
                 <div>
                   <img src={userData?.avatar} alt="" />
                 </div>
-                <h4 className="text-xl capitalize">{userData.fullName}</h4>
+                <h4 className="text-xl capitalize">{userData?.fullName}</h4>
               </div>
-              <Link to="/log" className="text-blue-600">
+              <Link to="/login" className="text-blue-600">
                 logOut
               </Link>
             </div>
@@ -114,6 +117,7 @@ const Chat = () => {
           </div>
           <div>
             <p className="text-sm font-semibold capitalize">{currentUser}</p>
+
             <p className="text-xs text-gray-500">Online</p>
           </div>
         </div>
