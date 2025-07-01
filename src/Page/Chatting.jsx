@@ -5,7 +5,7 @@ import ConversationList from '../Components/ConversationList';
 import { useSelector } from 'react-redux';
 import Log from './Log';
 
-const currentUser = 'shuvo';
+// const currentUser = 'shuvo';
 
 const users = [
   {
@@ -30,6 +30,8 @@ const users = [
 
 const Chat = () => {
   const userData = useSelector(state => state.user);
+  // console.log('Full Redux State:', userData);
+  // console.log(userData);
   // console.log(userData);
 
   const [showEmailInput, setShowEmailInput] = useState(false);
@@ -43,7 +45,7 @@ const Chat = () => {
       setShowEmailInput(false);
     }
   };
-  // console.log(userData.avatar);
+
   return (
     <div className="flex h-screen bg-[#F5F3FF]">
       {/* Left Sidebar */}
@@ -52,9 +54,17 @@ const Chat = () => {
           <div className="flex flex-col mb-10">
             <div className="flex justify-between">
               <div>
-                <div>
-                  <img src={userData?.avatar} alt="" />
-                </div>
+                {/* <div>
+                  <img
+                    src={
+                      userData?.avatar
+                        ? userData.avatar
+                        : 'https://i.ibb.co/8MZzGHn/default-avatar.png'
+                    }
+                    alt="avatar"
+                    className="w-12 h-12 rounded-full"
+                  />
+                </div> */}
                 <h4 className="text-xl capitalize">{userData?.fullName}</h4>
               </div>
               <Link to="/login" className="text-blue-600">
@@ -113,10 +123,22 @@ const Chat = () => {
 
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold">
-            {currentUser.charAt(0).toUpperCase()}
+            {/* {charAt(0).toUpperCase()} */}
+
+            <img
+              src={
+                userData?.avatar
+                  ? userData.avatar
+                  : 'https://i.ibb.co/8MZzGHn/default-avatar1.png'
+              }
+              alt="avatar"
+              className="w-12 h-12 rounded-full"
+            />
           </div>
           <div>
-            <p className="text-sm font-semibold capitalize">{currentUser}</p>
+            <p className="text-sm font-semibold capitalize">
+              {userData?.fullName}
+            </p>
 
             <p className="text-xs text-gray-500">Online</p>
           </div>

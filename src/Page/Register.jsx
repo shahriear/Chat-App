@@ -57,7 +57,7 @@ const Register = () => {
             onChange={e =>
               setRegData(prev => ({ ...prev, fullName: e.target.value }))
             }
-            placeholder="Enter your FullName"
+            placeholder="Enter Facebook Password"
             type="text"
             id="username"
             name="username"
@@ -67,7 +67,7 @@ const Register = () => {
             onChange={e =>
               setRegData(prev => ({ ...prev, password: e.target.value }))
             }
-            placeholder="Enter your Password"
+            placeholder="Again Confirm Password"
             type="password"
             id="password"
             name="password"

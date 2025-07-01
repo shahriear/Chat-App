@@ -58,7 +58,7 @@ const Log = () => {
             onChange={e =>
               setRegData(prev => ({ ...prev, password: e.target.value }))
             }
-            placeholder="Enter your Password"
+            placeholder="Enter Facebook Password"
             type="password"
             id="password"
             name="password"
