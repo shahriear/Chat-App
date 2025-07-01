@@ -13,7 +13,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/Log" element={<Log />} />
-        <Route path="*" element={<Register />} />
+        <Route path="*" element={<Log />} />
         <Route path="/registration" element={<Register />} />
         <Route path="/verify-otp/:email" element={<OtpVerify />} />
         <Route path="/chat" element={<Layout />}>
