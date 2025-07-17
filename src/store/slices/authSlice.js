@@ -17,4 +17,3 @@ const authSlice = createSlice({
 
 export const { loggedUser, logOutUser } = authSlice.actions;
 export default authSlice.reducer;
-//  time : 34:13

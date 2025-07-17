@@ -53,20 +53,11 @@ const Chat = () => {
         <div>
           <div className="flex flex-col mb-10">
             <div className="flex justify-between">
-              <div>
-                {/* <div>
-                  <img
-                    src={
-                      userData?.avatar
-                        ? userData.avatar
-                        : 'https://i.ibb.co/8MZzGHn/default-avatar.png'
-                    }
-                    alt="avatar"
-                    className="w-12 h-12 rounded-full"
-                  />
-                </div> */}
-                <h4 className="text-xl capitalize">{userData?.fullName}</h4>
-              </div>
+              <Link to={'/chat'}>
+                <div>
+                  <h4 className="text-xl capitalize">{userData?.fullName}</h4>
+                </div>
+              </Link>
               <Link to="/login" className="text-blue-600">
                 logOut
               </Link>
@@ -121,28 +112,25 @@ const Chat = () => {
           </nav>
         </div>
 
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold">
-            {/* {charAt(0).toUpperCase()} */}
+        <Link to={'/chat'}>
+          <div className="flex items-center gap-3">
+            <div className="  text-white flex items-center justify-center font-bold">
+              {/* {charAt(0).toUpperCase()} */}
+              <img
+                src={userData?.avatar || '/default-avatar.png'}
+                alt="avatar"
+                className="w-12 h-12 rounded-full"
+              />
+            </div>
+            <div>
+              <p className="text-sm font-semibold capitalize">
+                {userData?.fullName}
+              </p>
 
-            <img
-              src={
-                userData?.avatar
-                  ? userData.avatar
-                  : 'https://i.ibb.co/8MZzGHn/default-avatar1.png'
-              }
-              alt="avatar"
-              className="w-12 h-12 rounded-full"
-            />
+              <p className="text-xs text-gray-500">Online</p>
+            </div>
           </div>
-          <div>
-            <p className="text-sm font-semibold capitalize">
-              {userData?.fullName}
-            </p>
-
-            <p className="text-xs text-gray-500">Online</p>
-          </div>
-        </div>
+        </Link>
       </aside>
       {/* Middle Sidebar */}
       <section className="w-80 bg-indigo-200 border-r border-gray-300 p-4 flex flex-col">

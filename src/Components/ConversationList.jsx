@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   FiPhone,
   FiVideo,
@@ -6,8 +6,19 @@ import {
   FiImage,
   FiSmile,
 } from 'react-icons/fi';
+import { chatServices } from '../services/api';
 
 const ConversationList = ({ selectedUser }) => {
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await chatServices.listConversation();
+        console.log(res);
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  }, []);
   if (!selectedUser) {
     return (
       <main className="bg-[url('/image/wp.jpg')] bg-cover bg-center flex-1 flex items-center justify-center text-amber-50 font-semibold">

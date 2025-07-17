@@ -7,6 +7,19 @@ const api = axios.create({
   },
 });
 
+api.interceptors.request.use(
+  config => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = token;
+    }
+    return config;
+  },
+  err => {
+    return Promise.reject(err);
+  }
+);
+
 export const authServices = {
   registration: async userData => {
     const res = await api.post('/auth/registration', userData);
@@ -25,4 +38,12 @@ export const authServices = {
     return res.data;
   },
 };
+
+export const chatServices = {
+  listConversation: async () => {
+    const res = await api.get('/chat/conversationList');
+    return res.data;
+  },
+};
+
 // time : 50:44
