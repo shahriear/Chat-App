@@ -5,6 +5,7 @@ const authSlice = createSlice({
   initialState: {
     user: JSON.parse(localStorage.getItem('loggedUser')) || null,
   },
+
   reducers: {
     loggedUser: (state, actions) => {
       state.user = actions.payload;

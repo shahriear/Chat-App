@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+// console.log('BASE_URL:', import.meta.env.VITE_API_BASE_URL);
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
   headers: {
@@ -10,6 +10,7 @@ const api = axios.create({
 api.interceptors.request.use(
   config => {
     const token = localStorage.getItem('token');
+
     if (token) {
       config.headers.Authorization = token;
     }
@@ -44,6 +45,10 @@ export const chatServices = {
     const res = await api.get('/chat/conversationList');
     return res.data;
   },
+  addConversation: async participentEmail => {
+    const res = await api.post('/chat/createconversation', {
+      participentEmail,
+    });
+    return res.data;
+  },
 };
-
-// time : 50:44

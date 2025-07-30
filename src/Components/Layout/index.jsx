@@ -1,18 +1,14 @@
-import React, { useEffect } from 'react';
-
 import { useSelector } from 'react-redux';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 
 const Layout = () => {
-  const navigate = useNavigate();
-  const user = useSelector(state => state.user);
+  const user = useSelector(state => state.authSlice.user);
   // console.log(user);
 
-  useEffect(() => {
-    if (!user) {
-      return navigate('/login');
-    }
-  }, []);
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
   return (
     <>
       <Outlet />
