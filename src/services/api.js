@@ -17,6 +17,8 @@ api.interceptors.request.use(
     return config;
   },
   err => {
+    console.log(err);
+
     return Promise.reject(err);
   }
 );
@@ -38,6 +40,18 @@ export const authServices = {
     }
     return res.data;
   },
+  updateUser: async (fullName, password, avatar) => {
+    const res = await api.post(
+      '/auth/update',
+      { fullName, password, avatar },
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
+    return res.data;
+  },
 };
 
 export const chatServices = {
@@ -49,6 +63,21 @@ export const chatServices = {
     const res = await api.post('/chat/createconversation', {
       participentEmail,
     });
+    return res.data;
+  },
+  getmessage: async conversationId => {
+    const res = await api.get(`/chat/getmessage/${conversationId}`);
+    return res.data;
+  },
+  sendMessage: async data => {
+    const { content, reciverId, conversationId } = data;
+
+    const res = await api.post(`/chat/send`, {
+      reciverId,
+      content,
+      conversationId,
+    });
+
     return res.data;
   },
 };

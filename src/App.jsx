@@ -7,6 +7,7 @@ import Log from './Page/Log';
 import Chat from './Page/Chatting';
 import OtpVerify from './Page/OtpVerify';
 import Layout from './Components/Layout';
+import UserProfile from './Page/Profile';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/verify-otp/:email" element={<OtpVerify />} />
         <Route path="/chat" element={<Layout />}>
           <Route index element={<Chat />} />
+          <Route path="/chat/profile" index element={<UserProfile />} />
         </Route>
       </Routes>
     </BrowserRouter>

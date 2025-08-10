@@ -4,6 +4,7 @@ import { authServices } from '../services/api';
 import { toast, ToastContainer } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { loggedUser } from '../store/slices/authSlice';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const Log = () => {
   const dispatch = useDispatch();
@@ -12,6 +13,7 @@ const Log = () => {
     email: '',
     password: '',
   });
+  const [showPassword, setShowPassword] = useState(false);
   const handelLog = async e => {
     e.preventDefault();
     try {
@@ -54,16 +56,26 @@ const Log = () => {
             name="email"
             className="input"
           />
-          <input
-            onChange={e =>
-              setRegData(prev => ({ ...prev, password: e.target.value }))
-            }
-            placeholder="Enter Password"
-            type="password"
-            id="password"
-            name="password"
-            className="input"
-          />
+          <div className="relative w-full">
+            <input
+              onChange={e =>
+                setRegData(prev => ({ ...prev, password: e.target.value }))
+              }
+              placeholder="Enter Password"
+              type={showPassword ? 'text' : 'password'}
+              id="password"
+              name="password"
+              className="input pr-10"
+              value={regData.password}
+            />
+            <div
+              className="absolute top-1/2 right-3 transform -translate-y-1/12 cursor-pointer text-gray-500"
+              onClick={() => setShowPassword(prev => !prev)}
+            >
+              {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+            </div>
+          </div>
+
           <span className="forgot-password">
             <a href="#">Forgot Password ?</a>
           </span>

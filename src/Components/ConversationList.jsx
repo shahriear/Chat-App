@@ -163,7 +163,7 @@
 //   );
 // };
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   FiPhone,
   FiVideo,
@@ -172,10 +172,19 @@ import {
   FiSmile,
 } from 'react-icons/fi';
 import { chatServices } from '../services/api';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { LuLamp } from 'react-icons/lu';
+import { fetchMessages, sendMessage } from '../store/slices/conversationSlice';
 
-const ConversationList = ({ selectedUser }) => {
+const ConversationList = () => {
+  const chatContainer = useRef(null);
+  const dispatch = useDispatch();
+  const { selectedConversation, messages } = useSelector(
+    state => state.conversationSlice
+  );
+  const [content, setContent] = useState('');
+
+  //
   // const user = useSelector(state => state.authSlice.user);
   // console.log('Redux user data:', user);
 
@@ -194,25 +203,57 @@ const ConversationList = ({ selectedUser }) => {
   //   })();
   // }, []);
 
-  if (!selectedUser) {
-    return (
-      <main className="bg-[url('/image/wp.jpg')] bg-cover bg-center flex-1 flex items-center justify-center text-amber-50 font-semibold">
-        Select a user to start chatting.
-      </main>
+  useEffect(() => {
+    dispatch(fetchMessages(selectedConversation.conversationId));
+  }, [selectedConversation]);
+
+  useEffect(() => {
+    const container = chatContainer.current;
+    if (container) {
+      container.scrollTop = container.scrollHeight;
+    }
+  }, [messages]);
+
+  // console.log(selectedConversation);
+  // console.log(messages);
+  const handelSendMessage = e => {
+    e.preventDefault();
+    // console.log(content);
+    // console.log(selectedConversation._id);
+    // console.log(selectedConversation.conversationId);
+    dispatch(
+      sendMessage({
+        content,
+        reciverId: selectedConversation._id,
+        conversationId: selectedConversation.conversationId,
+      })
     );
-  }
+    setContent('');
+  };
 
   return (
-    <main className="flex-1 flex flex-col  bg-[url('/images/bkg.avif')] bg-repeat bg-cover">
+    <div className="flex-1 flex flex-col h-full bg-[url('/image/wp.jpg')] bg-cover bg-center">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-gray-300 px-6 py-4">
+      <div className="flex items-center justify-between border-b border-gray-300 px-6 py-4 bg-white bg-opacity-60 backdrop-blur-md">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold">
-            {selectedUser?.name?.charAt(0)?.toUpperCase() || 'U'}
+          <div className="w-10 h-12 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold overflow-hidden">
+            {selectedConversation?.avatar ? (
+              <img
+                src={selectedConversation.avatar}
+                alt="avatar"
+                className="w-full h-fit object-cover"
+              />
+            ) : (
+              selectedConversation?.fullName?.charAt(0).toUpperCase()
+            )}
           </div>
           <div>
-            <h3 className="font-semibold capitalize">{selectedUser?.name}</h3>
-            <p className="text-xs text-gray-500">Online</p>
+            <h3 className="font-semibold capitalize">
+              {selectedConversation?.fullName}
+            </h3>
+            <p className="text-xs text-gray-600">
+              {selectedConversation?.email}
+            </p>
           </div>
         </div>
         <div className="flex gap-4 text-xl text-gray-600">
@@ -222,44 +263,258 @@ const ConversationList = ({ selectedUser }) => {
         </div>
       </div>
 
-      {/* Messages wp.jpg */}
-      <div className="bg-[url('/image/wp.jpg')] bg-cover bg-center flex-1 p-6 overflow-y-auto space-y-4">
-        <div className="flex justify-start">
-          <div className=" mt-4 bg-white px-4 py-2 rounded-2xl max-w-sm text-sm shadow-sm">
-            <p>Hey! Are you free tomorrow?</p>
-            <span className="bottom- text-[11px] text-gray-400 mt-1">
-              {selectedUser?.time}
-            </span>
-          </div>
-        </div>
-        <div className="flex justify-end">
-          <div className=" mt-4 bg-[#C4B5FD] px-4 py-2 rounded-2xl max-w-sm text-sm shadow-sm">
-            <p>Yes! What time works for you?</p>
-            <span className=" text-[11px] text-gray-500 mt-1">
-              {selectedUser?.time}
-            </span>
-          </div>
-        </div>
+      {/* Messages */}
+      <div ref={chatContainer} className="flex-1 overflow-y-auto p-4 space-y-4">
+        {messages && messages.length > 0 ? (
+          messages.map((msg, index) => (
+            <div
+              key={index}
+              className={`flex ${
+                msg.sender === selectedConversation._id
+                  ? 'justify-start'
+                  : 'justify-end'
+              }`}
+            >
+              <div
+                className={`px-4 py-2 rounded-2xl max-w-sm text-sm shadow ${
+                  msg.sender === selectedConversation._id
+                    ? 'bg-white text-black'
+                    : 'bg-[#C4B5FD] text-black'
+                }`}
+              >
+                <p>{msg.content}</p>
+                <span className="text-[11px] text-gray-500 block mt-1 text-right">
+                  {new Date(msg.updatedAt).toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
+                </span>
+              </div>
+            </div>
+          ))
+        ) : (
+          <p className="text-sm text-center text-white font-semibold">
+            No messages yet
+          </p>
+        )}
       </div>
 
-      {/* Input */}
-      <div className="p-4 border-t border-gray-300 flex items-center gap-2">
-        <button className="text-xl text-black hover:text-blue-600">
+      {/* Message Input */}
+      <form
+        onSubmit={handelSendMessage}
+        className="p-4 border-t border-gray-300 bg-white bg-opacity-70 backdrop-blur-md flex items-center gap-2"
+      >
+        <button
+          type="button"
+          className="text-xl text-black hover:text-blue-600"
+        >
           <FiSmile />
         </button>
-        <button className="text-xl text-black hover:text-blue-600">
+        <button
+          type="button"
+          className="text-xl text-black hover:text-blue-600"
+        >
           <FiImage />
         </button>
         <input
+          value={content}
           type="text"
+          onChange={e => setContent(e.target.value)}
           placeholder="Type a message..."
-          className="flex-1 border border-black px-4 py-2 rounded-full text-sm outline-none"
+          className="flex-1 border border-gray-400 px-4 py-2 rounded-full text-sm outline-none focus:ring-2 focus:ring-blue-400"
+          required
         />
-        <button className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 text-sm">
+        <button
+          type="submit"
+          className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 text-sm"
+        >
           Send
         </button>
-      </div>
-    </main>
+      </form>
+    </div>
+    // 57:18
+    // -------------------------------------------------
+    // return (
+    //   <div className="bg-[url('/image/wp.jpg')] bg-cover bg-center flex-1 p-6 overflow-y-auto space-y-4">
+    //     {/* Header */}
+    //     <div className="flex items-center justify-between border-b border-gray-300 px-6 py-4">
+    //       <div className="flex items-center gap-3">
+    //         <div className="w-9 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold">
+    //           {selectedConversation?.avatar ? (
+    //             <img
+    //               src={selectedConversation.avatar}
+    //               alt="avatar"
+    //               className="w-fit h-fit rounded-full object-cover"
+    //             />
+    //           ) : (
+    //             selectedConversation?.fullName?.charAt(0).toUpperCase()
+    //           )}
+    //         </div>
+    //         <div>
+    //           <h3 className="font-semibold capitalize">
+    //             {selectedConversation?.fullName}
+    //           </h3>
+    //           <p className="text-xs text-gray-500">
+    //             {selectedConversation?.email}
+    //           </p>
+    //         </div>
+    //       </div>
+    //       <div className="flex gap-4 text-xl text-gray-600">
+    //         <FiPhone className="cursor-pointer hover:text-blue-600" />
+    //         <FiVideo className="cursor-pointer hover:text-blue-600" />
+    //         <FiMoreVertical className="cursor-pointer hover:text-blue-600" />
+    //       </div>
+    //     </div>
+    //     {messages && messages.length > 0 ? (
+    //       messages.map((msg, index) => (
+    //         <div
+    //           key={index}
+    //           className={`flex ${
+    //             msg.sender === selectedConversation._id
+    //               ? 'justify-start'
+    //               : 'justify-end'
+    //           }`}
+    //         >
+    //           <div
+    //             className={`mt-2 px-4 py-2 rounded-2xl max-w-sm text-sm shadow-sm ${
+    //               msg.sender === selectedConversation._id
+    //                 ? 'bg-white text-black'
+    //                 : 'bg-[#C4B5FD] text-black'
+    //             }`}
+    //           >
+    //             <p>{msg.content}</p>
+    //             <span className="text-[11px] text-gray-500 block mt-1">
+    //               {new Date(msg.updatedAt).toLocaleTimeString([], {
+    //                 hour: '2-digit',
+    //                 minute: '2-digit',
+    //               })}
+    //             </span>
+    //           </div>
+    //         </div>
+    //       ))
+    //     ) : (
+    //       <p className="text-sm text-center text-amber-50 font-semibold ">
+    //         No messages yet
+    //       </p>
+    //     )}
+    //     {/* Input */}
+    //     //{' '}
+    //     <div className="p-4 border-t border-gray-300 flex items-center gap-2">
+    //       <button className="text-xl text-black hover:text-blue-600">
+    //         <FiSmile />
+    //       </button>
+    //       <button className="text-xl text-black hover:text-blue-600">
+    //         <FiImage />
+    //       </button>
+    //       <input
+    //         type="text"
+    //         placeholder="Type a message..."
+    //         className="flex-1 border border-black px-4 py-2 rounded-full text-sm outline-none"
+    //       />
+    //       <button className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 text-sm">
+    //         Send
+    //       </button>
+    //     </div>
+    //   </div>
+
+    // <main className="flex-1 flex flex-col  bg-[url('/images/bkg.avif')] bg-repeat bg-cover">
+    //   {/* Header */}
+
+    //   <div className="flex items-center justify-between border-b border-gray-300 px-6 py-4 bg-white bg-opacity-60 backdrop-blur-md">
+    //     <div className="flex items-center gap-3">
+    //       <div className="w-10 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold overflow-hidden">
+    //         {selectedConversation?.avatar ? (
+    //           <img
+    //             src={selectedConversation.avatar}
+    //             alt="avatar"
+    //             className="w-full h-full object-cover"
+    //           />
+    //         ) : (
+    //           selectedConversation?.fullName?.charAt(0).toUpperCase()
+    //         )}
+    //       </div>
+    //       <div>
+    //         <h3 className="font-semibold capitalize">
+    //           {selectedConversation?.fullName}
+    //         </h3>
+    //         <p className="text-xs text-gray-600">
+    //           {selectedConversation?.email}
+    //         </p>
+    //       </div>
+    //     </div>
+    //     <div className="flex gap-4 text-xl text-gray-600">
+    //       <FiPhone className="cursor-pointer hover:text-blue-600" />
+    //       <FiVideo className="cursor-pointer hover:text-blue-600" />
+    //       <FiMoreVertical className="cursor-pointer hover:text-blue-600" />
+    //     </div>
+    //   </div>
+
+    //   {/* Messages*/}
+
+    //   <div className="flex-1 overflow-y-auto p-4 space-y-4">
+    //     {messages && messages.length > 0 ? (
+    //       messages.map((msg, index) => (
+    //         <div
+    //           key={index}
+    //           className={`flex ${
+    //             msg.sender === selectedConversation._id
+    //               ? 'justify-start'
+    //               : 'justify-end'
+    //           }`}
+    //         >
+    //           <div
+    //             className={`px-4 py-2 rounded-2xl max-w-sm text-sm shadow ${
+    //               msg.sender === selectedConversation._id
+    //                 ? 'bg-white text-black'
+    //                 : 'bg-[#C4B5FD] text-black'
+    //             }`}
+    //           >
+    //             <p>{msg.content}</p>
+    //             <span className="text-[11px] text-gray-500 block mt-1 text-right">
+    //               {new Date(msg.updatedAt).toLocaleTimeString([], {
+    //                 hour: '2-digit',
+    //                 minute: '2-digit',
+    //               })}
+    //             </span>
+    //           </div>
+    //         </div>
+    //       ))
+    //     ) : (
+    //       <p className="text-sm text-center text-white font-semibold">
+    //         No messages yet
+    //       </p>
+    //     )}
+    //   </div>
+
+    //   {/* Input */}
+    //   <form className="p-4 border-t border-gray-300 bg-white bg-opacity-70 backdrop-blur-md flex items-center gap-2">
+    //     <button
+    //       type="button"
+    //       className="text-xl text-black hover:text-blue-600"
+    //     >
+    //       <FiSmile />
+    //     </button>
+    //     <button
+    //       type="button"
+    //       className="text-xl text-black hover:text-blue-600"
+    //     >
+    //       <FiImage />
+    //     </button>
+    //     <input
+    //       type="text"
+    //       onChange={e => setContent(e.target.value)}
+    //       placeholder="Type a message..."
+    //       className="flex-1 border border-gray-400 px-4 py-2 rounded-full text-sm outline-none focus:ring-2 focus:ring-blue-400"
+    //       required
+    //     />
+    //     <button
+    //       type="submit"
+    //       className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 text-sm"
+    //     >
+    //       Send
+    //     </button>
+    //   </form>
+    // </main>
   );
 };
 
