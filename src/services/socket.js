@@ -4,7 +4,7 @@ import { newMessage } from '../store/slices/conversationSlice';
 
 let socket;
 const initSocket = () => {
-  socket = io.connect('http://localhost:8000');
+  socket = io.connect(import.meta.env.VITE_API_BASE_URL);
 
   socket.on('new_message', res => {
     // console.log(res);
