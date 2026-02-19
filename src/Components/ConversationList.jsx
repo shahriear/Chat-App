@@ -163,11 +163,6 @@
 //   );
 // };
 
-
-
-
-
-
 import React, { useEffect, useRef, useState } from 'react';
 import {
   FiPhone,
@@ -181,11 +176,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { LuLamp } from 'react-icons/lu';
 import { fetchMessages, sendMessage } from '../store/slices/conversationSlice';
 
-const ConversationList = ({ onBack }) => {
+const ConversationList = () => {
   const chatContainer = useRef(null);
   const dispatch = useDispatch();
   const { selectedConversation, messages } = useSelector(
-    state => state.conversationSlice,
+    state => state.conversationSlice
   );
   const [content, setContent] = useState('');
 
@@ -231,7 +226,7 @@ const ConversationList = ({ onBack }) => {
         content,
         reciverId: selectedConversation._id,
         conversationId: selectedConversation.conversationId,
-      }),
+      })
     );
     setContent('');
   };
@@ -239,36 +234,34 @@ const ConversationList = ({ onBack }) => {
   return (
     <div className="flex-1 flex flex-col h-full bg-[url('/image/wp.jpg')] bg-cover bg-center">
       {/* Header */}
-     <div className="flex items-center justify-between border-b px-4 py-3 bg-white/70 backdrop-blur-md">
-
-  <div className="flex items-center gap-3">
-
-    {/* MOBILE BACK BUTTON */}
-    <button
-      onClick={onBack}
-            className="md:hidden text-xl mr-1"
-    >
-      ←
-    </button>
-
-    <div className="w-10 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold overflow-hidden">
-      {selectedConversation?.avatar ? (
-        <img src={selectedConversation.avatar} />
-      ) : (
-        selectedConversation?.fullName?.charAt(0).toUpperCase()
-      )}
-    </div>
-
-    <div>
-      <h3 className="font-semibold capitalize">
-        {selectedConversation?.fullName}
-      </h3>
-      <p className="text-xs text-gray-600">
-        {selectedConversation?.email}
-      </p>
-    </div>
-  </div>
-</div>
+      <div className="flex items-center justify-between border-b border-gray-300 px-6 py-4 bg-white bg-opacity-60 backdrop-blur-md">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-12 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold overflow-hidden">
+            {selectedConversation?.avatar ? (
+              <img
+                src={selectedConversation.avatar}
+                alt="avatar"
+                className="w-full h-fit object-cover"
+              />
+            ) : (
+              selectedConversation?.fullName?.charAt(0).toUpperCase()
+            )}
+          </div>
+          <div>
+            <h3 className="font-semibold capitalize">
+              {selectedConversation?.fullName}
+            </h3>
+            <p className="text-xs text-gray-600">
+              {selectedConversation?.email}
+            </p>
+          </div>
+        </div>
+        <div className="flex gap-4 text-xl text-gray-600">
+          <FiPhone className="cursor-pointer hover:text-blue-600" />
+          <FiVideo className="cursor-pointer hover:text-blue-600" />
+          <FiMoreVertical className="cursor-pointer hover:text-blue-600" />
+        </div>
+      </div>
 
       {/* Messages */}
       <div ref={chatContainer} className="flex-1 overflow-y-auto p-4 space-y-4">
