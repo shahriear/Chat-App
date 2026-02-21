@@ -328,7 +328,7 @@ const ConversationList = ({ onBack }) => {
           type="text"
           onChange={e => setContent(e.target.value)}
           placeholder="Type a message..."
-          className="flex-1 border border-gray-400 px-4 py-2 rounded-full text-sm outline-none focus:ring-2 focus:ring-blue-400"
+          className="flex-1 border border-gray-400 px-4 py-2 rounded-full text-[16px] outline-none focus:ring-2 focus:ring-blue-400"
           required
         />
         <button
