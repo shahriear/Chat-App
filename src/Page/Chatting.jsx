@@ -188,7 +188,7 @@ const Chat = () => {
           </div> */}
           <Link to={'/chat/profile'}>
             <div className="flex items-center gap-3">
-              <div className="w-fit h-13 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold text-xl">
+              <div className="w-10 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold overflow-hidden">
                 {userData?.avatar ? (
                   <img
                     src={userData.avatar}
