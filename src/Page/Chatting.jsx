@@ -218,8 +218,8 @@ const Chat = () => {
           <FiSearch />
           <input
             type="text"
-            placeholder="Search"
-            className="bg-transparent outline-none text-sm flex-1 ml-2"
+            placeholder="Searchhh"
+            className="bg-transparent outline-none text-[16px] flex-1 ml-2"
           />
         </div>
 
