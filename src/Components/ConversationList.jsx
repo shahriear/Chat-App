@@ -237,7 +237,7 @@ const ConversationList = ({ onBack }) => {
   };
 
   return (
-    <div className="flex-1 flex flex-col min-h-[100dvh] bg-[url('/image/wp.jpg')] bg-cover bg-center">
+    <div className="flex-1 flex flex-col min-h-0 bg-[url('/image/wp.jpg')] bg-cover bg-center">
       {/* Header */}
      <div className="flex items-center justify-between border-b px-4 py-3 bg-white/70 backdrop-blur-md">
 
@@ -335,7 +335,7 @@ const ConversationList = ({ onBack }) => {
           type="submit"
           className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 text-sm"
         >
-          Sendd
+          Send
         </button>
       </form>
     </div>
