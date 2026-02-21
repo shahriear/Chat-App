@@ -61,7 +61,7 @@ const Chat = () => {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#F5F3FF]">
+    <div className="flex min-h-[100dvh] overflow-hidden bg-[#F5F3FF]">
       {/* DESKTOP SIDEBAR */}
       <aside className="hidden md:flex w-64 bg-indigo-200 flex-col justify-between p-4 border-r">
         <div>
@@ -218,7 +218,7 @@ const Chat = () => {
           <FiSearch />
           <input
             type="text"
-            placeholder="Searchhh"
+            placeholder="Search"
             className="bg-transparent outline-none text-[16px] flex-1 ml-2"
           />
         </div>
